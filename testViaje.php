@@ -30,7 +30,7 @@ function seleccionarOpcion(){
     echo "\n";
     echo "3- Modificar datos:";
     echo "\n";
-    echo "4- Salir.";
+    echo "4- Agregar un pasajero.";
     echo "\n";
     echo "\n********************************************************** \n";
     
@@ -97,37 +97,32 @@ function ModificarDni($nuevoArray,$dniPas,$dniNuevo){
 
 // PROGRAMA PRINCIPAL
 // inicializacion de variable
-$nuevoArray=[];
 
 do {
     $opcionMenu = seleccionarOpcion();
     switch ($opcionMenu) {
         case 1: //Cargar informacion del viaje.
+            echo "Ingrese el codigo del viaje:";
+            $codigo= strtolower(trim(fgets(STDIN)));
             echo "Ingrese el nombre del destino:";
-            $destino= strtolower(trim(fgets(STDIN)));
+            $destino= ucwords( trim(fgets(STDIN)));
             echo "Ingrese la cantidad maxima de pasajero:";
             $cantidadMax= trim(fgets(STDIN));
-            echo "Ingrese la cantidad de pasajeros que viajan:";
-            $pasajeros= trim(fgets(STDIN));
-            $viaje1= new Viaje( $destino,$cantidadMax,$pasajeros);
-            // CARGAR DATOS DE PASAJEROS
-            echo "Cuanto pasajero desea agregar?";
-            $numPas=trim(fgets(STDIN));
+            $viaje1= new Viaje($codigo, $destino,$cantidadMax);
 
-            for($num=1; $num <= $numPas ; $num=$num + 1){
+            // CARGAR DATOS DE PASAJEROS
+           echo "Cuanto pasajero desea agregar?";
+            $numPas=trim(fgets(STDIN))-1;
+
+            for($num=0; $num <= $numPas ; $num=$num + 1){
             echo "Ingrese nombre del pasajero:";
-            $nombre= trim(fgets(STDIN));
-            $viaje1->setNombrePasajero($nombre);
+            $nombre=ucwords( trim(fgets(STDIN)));
             echo "Ingrese el apellido:";
-            $apellido= trim(fgets(STDIN));
-            $viaje1->setApellidoPasajero($apellido);
+            $apellido= ucwords( trim(fgets(STDIN)));
             echo "Ingrese el numero de dni:";
             $numDoc = trim(fgets(STDIN));
-            $viaje1->setNumeroDocumento($numDoc );
-
-            $pasajeros= $viaje1->CargarDatosPasajero();
-
-            array_push($nuevoArray,$pasajeros);
+            $coleccionPasajeros[$num] = ["nombre" => $nombre, "apellido" =>  $apellido, "dni" => $numDoc];
+            $viaje1->setColeccionPasajeros($coleccionPasajeros);
             }
             echo "\n";
             echo "LOS DATOS FUERON CARGADOS CORRECTAMENTE.";
@@ -135,98 +130,86 @@ do {
             volverAlMenu();
         break;
         case 2:// Ver datos cargados.
-
-            echo "LOS DATOS CARGADOS SON LOS SIGUIENTES:\n";
-            echo "Destino:" . $viaje1->getDestino();
-            echo " \n Cantidad Maxima de pasajeros:" . $viaje1->getCantMaxPasajero();
-            echo "\n Cantidad de pasajeros que viajan:" . $viaje1->getLosQueViajan();
-            echo "\n La lista de pasajeros cargado es:";
-            print_r($nuevoArray);
+            echo "LOS DATOS CARGADOS SON LOS SIGUIENTES:\n".$viaje1;
             volverAlMenu();
         break;
         case 3: //Modificar datos:
             echo "Escriba el NUMERO que corresponda al dato a modificar y presione ENTER:\n";
-            echo "Destino= 1\n";
-            echo "Cantidad pasajeros total= 2\n";
-            echo "Cantidad pasajeros que viajan = 3\n";
-            echo "NOMBRE de un pasajero= 4\n";
-            echo "APELLIDO de un pasajero= 5\n";
-            echo "DNI de un pasajero= 6\n";
+            echo "\nCodigo viaje= 1\n";
+            echo "Destino= 2\n";
+            echo "Cantidad pasajeros total= 3\n";
+            echo "DATOS DE LOS PASAJEROS = 4\n";
             $opcion = trim(fgets(STDIN));
-                if($opcion == 1) {
-                    echo "Ingrese el NUEVO destino:";
-                    $nuevoDestino=strtolower(trim(fgets(STDIN)));
-                    $viaje1-> setDestino($nuevoDestino); // set me permite cambiar la variable
-                    echo "La nueva informacion del viaje es:\n";
-                    echo "Destino:" . $viaje1->getDestino(). "\n";
-                    echo "Cantidad Maxima de pasajeros:" . $viaje1->getCantMaxPasajero(). "\n";
-                    echo "Cantidad de pasajeros que viajan:" . $viaje1->getLosQueViajan(). "\n";
-                }
-                else if($opcion == 2) {
-                    echo "Ingrese la nueva cantidad TOTAL de pasajero:";
-                    $cantPas=trim(fgets(STDIN));
-                    $viaje1-> setCantMaxPasajero($cantPas); // set me permite cambiar la variable
-                    echo "La nueva informacion del viaje es:\n";
-                    echo "Destino:" . $viaje1->getDestino(). "\n";
-                    echo "Cantidad Maxima de pasajeros:" . $viaje1->getCantMaxPasajero(). "\n";
-                    echo "Cantidad de pasajeros que viajan:" . $viaje1->getLosQueViajan(). "\n";
-                }
-                else if($opcion == 3) {
-                    echo "Ingrese los pasajeros que viajan.\n";
-                    $pasVijan=trim(fgets(STDIN));
-                    $viaje1-> setLosQueViajan($pasVijan); // set me permite cambiar la variable
-                    echo "La nueva informacion del viaje es:". "\n";
-                    echo "Destino:" . $viaje1->getDestino(). "\n";
-                    echo "Cantidad Maxima de pasajeros:" . $viaje1->getCantMaxPasajero(). "\n";
-                    echo "Cantidad de pasajeros que viajan:" . $viaje1->getLosQueViajan(). "\n";
-                }
-                 else if($opcion == 4) {
-                   echo " LOS NOMBRES CARGADOS SON:\n";
-                   $i=0;
-                   while($i<count($nuevoArray)){
-                    print $nuevoArray[$i]["nombre"]."\n";
-                    $i++;
+            if($opcion == 1) {
+                echo "Ingrese el NUEVO codigo:";
+                $nuevoCodigo=trim(fgets(STDIN));
+                $viaje1-> setCodigo( $nuevoCodigo); // set me permite cambiar la variable
+                echo "La nueva informacion del viaje es:\n". $viaje1;
+            }
+            else if($opcion == 2) {
+                echo "Ingrese el NUEVO destino:";
+                $nuevoDestino=trim(fgets(STDIN));
+                $viaje1-> setDestino( $nuevoDestino); // set me permite cambiar la variable
+                echo "\n La nueva informacion del viaje es:\n". $viaje1;
+            }
+            else if($opcion == 3) {
+                echo "Ingrese la NUEVA cantidad TOTAL de pasajero:";
+                $cantPas=trim(fgets(STDIN));
+                $viaje1-> setCantMaxPasajero($cantPas); // set me permite cambiar la variable
+                echo "La nueva informacion del viaje es:\n". $viaje1;
+            }
+            else if($opcion == 4) {
+            echo "Escriba el NUMERO de DNI del pasajero a modificar y presione ENTER:\n";
+            $numDoc = trim(fgets(STDIN));
+            $indicePasajero=$viaje1->buscarPasajero($numDoc);
+              if ( $indicePasajero >=0){
+                 echo "Se encontro pasajero:\n";
+                 echo "Que dato desea moficar: nombre, apellido o DNI?\n";
+                 $datoModificar= trim(fgets(STDIN));
+                   if($datoModificar == "nombre"){
+                    echo "Ingrese el nuevo nombre:";
+                    $nuevoNombre=trim(fgets(STDIN));
+                    $colPas= $viaje1->getColeccionPasajeros();
+                    $apellido = $colPas [$indicePasajero]["apellido"];
+                    $numDoc =$colPas [$indicePasajero]["dni"];
+                    $viaje1->modificarPasajero($numDoc, $nuevoNombre, $apellido,$indicePasajero);
+                    echo "Se modifico el pasajero ". $viaje1->datosPasajeros();
                    }
-                   echo " Ingrese el NOMBRE que quiere modificar:\n";
-                   $nombrePas=ucwords(trim(fgets(STDIN)));
-                   echo " Ingrese el nombre nuevo:". "\n";
-                   $nombreNuevo= ucwords(trim(fgets(STDIN)));
-                   $nuevoArray= ModificarNombre( $nuevoArray,$nombrePas,$nombreNuevo);
-                   echo "LA NUEVA LISTA ES:\n";
-                   print_r($nuevoArray);
-                }
-                else if($opcion == 5) {
-                    echo " LOS APELLIDOS CARGADOS SON:\n";
-                    $i=0;
-                    while($i<count($nuevoArray)){
-                     print $nuevoArray[$i]["apellido"]."\n";
-                     $i++;
-                    }
-                    echo " Ingrese el APELLIDO que quiere modificar:\n";
-                    $apellidoPas= ucwords(trim(fgets(STDIN)));
-                    echo " Ingrese el apellido nuevo:";
-                    $apellidoNuevo= ucwords(trim(fgets(STDIN)));
-                    $nuevoArray= ModificarApellido( $nuevoArray, $apellidoPas,$apellidoNuevo);
-                    print_r($nuevoArray);
-                 }
-                 else if($opcion == 6) {
-                    echo " LOS DNI CARGADOS SON:\n";
-                    $i=0;
-                    while($i<count($nuevoArray)){
-                     print $nuevoArray[$i]["numDoc"]."\n";
-                     $i++;
-                    }
-                   echo " Ingrese los NUMEROS del Dni que quiere modificar:\n";
-                   $dniPas=  trim(fgets(STDIN));
-                   echo " Ingrese el dni nuevo:";
-                   $dniNuevo=  trim(fgets(STDIN));
-                   $nuevoArray= ModificarDni( $nuevoArray,$dniPas,$dniNuevo);
-                   print_r($nuevoArray);
-                }
+                   else if($datoModificar == "apellido"){
+                    echo "Ingrese el nuevo apellido:";
+                    $nuevoApellido=trim(fgets(STDIN));
+                    $colPas= $viaje1->getColeccionPasajeros();
+                    $nombre= $colPas [$indicePasajero]["nombre"];
+                    $numDoc =$colPas [$indicePasajero]["dni"];
+                    $viaje1->modificarPasajero($numDoc, $nombre, $nuevoApellido,$indicePasajero);
+                    echo "Se modifico el pasajero ". $viaje1->datosPasajeros();
+                   }
+                   else if($datoModificar == "DNI"){
+                    echo "Ingrese el nuevo DNI:";
+                    $nuevoDni=trim(fgets(STDIN));
+                    $colPas= $viaje1->getColeccionPasajeros();
+                    $nombre= $colPas [$indicePasajero]["nombre"];
+                    $apellido =$colPas [$indicePasajero]["apellido"];
+                    $viaje1->modificarPasajero( $nuevoDni, $nombre, $apellido,$indicePasajero);
+                    echo "Se modifico el pasajero ". $viaje1->datosPasajeros();
+                   }
+               }
+
+               else{
+                 echo "NO se encontraron datos que coincidan con ese pasajero";}
+               }
                 volverAlMenu();
         break;   
-        case 4: 
-            echo " Saliendo... "."\n";
+        case 4: //agregar un pasajero
+            echo "Ingrese nombre del pasajero:";
+            $nombre=ucwords( trim(fgets(STDIN)));
+            echo "Ingrese el apellido:";
+            $apellido= ucwords( trim(fgets(STDIN)));
+            echo "Ingrese el numero de dni:";
+            $numDoc = trim(fgets(STDIN));
+            $viaje1->agregarPasajero( $nombre,$apellido,$numDoc);
+            echo "Se agrego  el pasajero ".$viaje1;
+            volverAlMenu();
         break;
 }
 } while ($opcionMenu !=4);

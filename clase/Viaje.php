@@ -12,7 +12,7 @@ class Viaje{
         $this->codigo=$codigo;
         $this->destino =$destino;
         $this->cantMaxPasajero = $cantMaxPasajero;
-       // $this->coleccionPasajeros = $coleccionPasajeros;
+        $this->coleccionPasajeros=[];
     }
 // metodos get y set
     public function getCodigo(){
@@ -51,37 +51,49 @@ class Viaje{
     $nombre= $colPas[$i]["nombre"];
     $apellido= $colPas[$i]["apellido"];
     $dni= $colPas[$i]["dni"];
-    $cadena= $cadena."Pasajeros".$i."".$nombre."".$apellido."".$dni;
+    $cadena= $cadena."\n PASAJERO:" .($i+1)."\n NOMBRE:".$nombre."\n APELLIDO:".$apellido."\n DNI:".$dni."\n";
  }
+ return $cadena;
  }
 //Metodo __tostring
 public function __toString()
 {
     $cadena="";
-    $cadena="DATOS DEL VIAJE:\n Codigo:".$this->getCodigo()."\n Destino:".$this->getDestino()."\n Cantidad maxima de pasajero:".$this->getCantMaxPasajero()."\n"
-    .$this->datosPasajeros()."\n";
+    $cadena="DATOS DEL VIAJE:\n Codigo:".$this->getCodigo()."\n Destino:".$this->getDestino()."\n Cantidad maxima de pasajeros:".$this->getCantMaxPasajero()."\n"
+    ."\n DATOS DE LOS PASAJEROS:\n".$this->datosPasajeros()."\n";
     return $cadena;
 }
 //Funcion buscar pasajero
 public function buscarPasajero($dniPas){
     $colPas= $this-> getColeccionPasajeros();
+    $indice=-1;
     $i=0;
-    $seEncontro=false;
-    while($i< count($colPas) && !$seEncontro){
-        $seEncontro=$colPas[$i]["dni"]==$dniPas;
+    while($i<count($colPas)){
+        if ($colPas[$i]["dni"]==$dniPas){
+            $indice=$i; 
+        }
         $i=$i+1;
-    return $i-1;
     }
+    return $indice;
 }
 //Funcion Modificar pasajeros
-public function modificarPasajero($dniPas,$nombre,$apellido,$dniBuscar){
-    $indice=$this-> buscarPasajero($dniBuscar);
-    if ($indice >= 0){
+ public function modificarPasajero($dniPas,$nombre,$apellido,$indice){
+   // if ($indice >= 0){
         $colPas= $this-> getColeccionPasajeros();
         $colPas[$indice]["nombre"]=$nombre;
         $colPas[$indice]["apellido"]=$apellido;
         $colPas[$indice]["dni"]=$dniPas;
-
-    } 
+        $colPas=$this->setColeccionPasajeros( $colPas);
+    //} 
+    return $colPas;
 }
+//Funcion agregar pasajeros
+Public function agregarPasajero($dni, $nombre,$apellido){
+    $colPas = $this->getColeccionPasajeros();
+    if($this->getCantMaxPasajero() >= count($colPas)){
+        $colPas[] = ["nombre" => $nombre, "apellido" => $apellido, "dni" => $dni];
+        $this->setColeccionPasajeros($colPas);
+    }
+}
+
 }
