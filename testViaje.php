@@ -49,50 +49,6 @@ function  volverAlMenu (){
     
 }
 //Fin Modulo.
-// funcion modificar nombre
-function ModificarNombre($nuevoArray,$nombrePas,$nombreNuevo){
-$num=count($nuevoArray);
-$i = 0;
-$nombreNuevo=$nombreNuevo;
-while ($i <$num){
-    if( $nuevoArray[$i]["nombre"] == $nombrePas){
-        $nuevoArray[$i]["nombre"] = $nombreNuevo;
-       // echo "El nombre es:". $nuevoArray[$i]["nombre"]."\n";     
-    }   
-    $i = $i + 1;        
-}
-//print_r($nuevoArray);
-return  $nuevoArray;
-}
-// funcion modificar APELLIDO
-function ModificarApellido($nuevoArray,$apellidoPas,$apellidoNuevo){
-$num=count($nuevoArray);
-$i = 0;
-$apellidoNuevo=$apellidoNuevo;
-while ($i <$num){
-    if( $nuevoArray[$i]["apellido"] == $apellidoPas){
-        $nuevoArray[$i]["apellido"] = $apellidoNuevo;     
-    }   
-    $i = $i + 1;        
-}
-//print_r($nuevoArray);
-return  $nuevoArray;
-}
-
-// funcion modificar APELLIDO
-function ModificarDni($nuevoArray,$dniPas,$dniNuevo){
-    $num=count($nuevoArray);
-    $i = 0;
-    $dniNuevo=$dniNuevo;
-    while ($i <$num){
-        if( $nuevoArray[$i]["numDoc"] ==$dniPas){
-            $nuevoArray[$i]["numDoc"] = $dniNuevo;     
-        }   
-        $i = $i + 1;        
-    }
-    //print_r($nuevoArray);
-    return  $nuevoArray;
-    }
 
 
 // PROGRAMA PRINCIPAL
